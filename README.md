@@ -1,5 +1,6 @@
-## It is template micro-service for all micro-services in the project.
+## It is user micro-service.
 
 How to start user micro-service:
 
-`make user-micro-service-run-flow`
+1. Retrieve .env file using `npx dotenv-vault pull`
+2. Start the service `make user-micro-service-run-flow`
