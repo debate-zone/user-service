@@ -1,11 +1,47 @@
-import {z} from "zod"
-import {baseZodSchema} from "../../debate-zone-micro-service-common-library/src/zod/baseZodSchema"
+import { z } from 'zod';
+import { baseZodSchema } from '../../debate-zone-micro-service-common-library/src/zod/baseZodSchema';
+import { PoliticalPreferenceEnum } from './utils/enums/PoliticalPreferenceEnum';
+import { TokenProviderEnum } from './utils/enums/TokenProviderEnum';
 
-export const userSchema = baseZodSchema.extend({
-    email: z.string().email(),
-}).strict()
+const emailSchema = z.string().email();
+const passwordSchema = z.string().min(8).max(20);
 
+const baseCredentialsUserSchema = z.object({
+    email: emailSchema,
+    password: passwordSchema,
+});
 
-export const newUserSchema = userSchema.deepPartial()
+export const tokenSchema = z.object({
+    accessToken: z.string().optional(),
+    accessTokenExpiresAt: z.number().optional(),
+    refreshToken: z.string().optional(),
+    refreshTokenExpiresAt: z.number().optional(),
+    provider: z.nativeEnum(TokenProviderEnum).optional(),
+});
 
-export const outputSchema = z.object({})
+export const userSchema = baseZodSchema
+    .merge(baseCredentialsUserSchema)
+    .extend({
+        token: tokenSchema.optional(),
+        politicalPreference: z.nativeEnum(PoliticalPreferenceEnum).optional(),
+    })
+    .strict();
+
+export const newUserSchema = userSchema.deepPartial();
+export const outputNewUserSchema = userSchema.deepPartial();
+
+export const loginUserSchema = z.object({
+    email: emailSchema.optional(),
+    password: passwordSchema.optional(),
+    provider: z.nativeEnum(TokenProviderEnum),
+});
+
+export const outputLoginUserSchema = userSchema.omit({
+    password: true,
+});
+
+export const registerUserSchema = baseCredentialsUserSchema.extend({
+    politicalPreference: z.nativeEnum(PoliticalPreferenceEnum).optional(),
+});
+
+export const loginCredentialsUserSchema = baseCredentialsUserSchema.extend({});
