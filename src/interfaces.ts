@@ -1,8 +1,8 @@
-import { JwtPayload } from 'jsonwebtoken';
 import { TokenProviderEnum } from './utils/enums/TokenProviderEnum';
+import { AuthDecoded } from './services/auth/authDecoder';
 
 export interface AuthDecoder {
     readonly provider: TokenProviderEnum;
 
-    decodeToken(token: string): JwtPayload;
+    decodeToken(token: string): Promise<AuthDecoded>;
 }

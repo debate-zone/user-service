@@ -1,5 +1,9 @@
 import { defaultEndpointsFactory } from 'express-zod-api';
-import { newUserSchema, outputNewUserSchema } from '../zodSchema';
+import {
+    newUserSchema,
+    outputNewUserSchema,
+    updateUserSchema,
+} from '../zodSchema';
 import { authMiddleware } from '../middlewares';
 import { save } from '../services/user/userService';
 
@@ -20,11 +24,12 @@ export const updateUserEndpoint = defaultEndpointsFactory
     .build({
         shortDescription: 'Update user',
         description: 'Update user',
-        method: 'put',
-        input: newUserSchema,
+        method: 'post',
+        input: updateUserSchema,
         output: outputNewUserSchema,
         handler: async ({ input, options, logger }): Promise<{}> => {
             logger.info('Update user', input);
+
             return await save(input, {
                 email: options.loggedUser.email,
             });
