@@ -1,6 +1,5 @@
-import { JwtPayload } from 'jsonwebtoken';
 import { TokenProviderEnum } from '../../utils/enums/TokenProviderEnum';
-import { decode } from './authDecoder';
+import { AuthDecoded, decode } from './authDecoder';
 import { validateCredentials } from './authCredentialsService';
 import { createHttpError } from 'express-zod-api';
 import { LoginUser, OutputLoginUser, RegisterUser, User } from '../../types';
@@ -9,15 +8,15 @@ import bcrypt from 'bcrypt';
 
 export const login = async (
     input: LoginUser,
-    options: { token: string },
+    options: { token: string; provider: TokenProviderEnum },
 ): Promise<OutputLoginUser> => {
-    let decodedToken: JwtPayload = {} as JwtPayload;
+    let decodedToken: AuthDecoded = {} as AuthDecoded;
 
-    switch (input.provider) {
+    switch (options.provider) {
         case TokenProviderEnum.APPLE:
         case TokenProviderEnum.GOOGLE:
         case TokenProviderEnum.FACEBOOK:
-            decodedToken = decode(options.token, input.provider);
+            decodedToken = await decode(options.token, options.provider);
             break;
         case TokenProviderEnum.CREDENTIALS:
             if (!input.email || !input.password) {
@@ -37,6 +36,7 @@ export const login = async (
             email: decodedToken.email,
         },
         {
+            email: decodedToken.email,
             token: {
                 accessToken: decodedToken?.accessToken,
                 accessTokenExpiresAt: decodedToken?.accessTokenExpiresAt,
@@ -50,7 +50,12 @@ export const login = async (
         throw createHttpError(404, 'User not found');
     }
 
-    return user;
+    console.log(user);
+
+    return {
+        email: user.email,
+        politicalPreference: user.politicalPreference,
+    };
 };
 
 export const register = async (input: RegisterUser): Promise<User> => {

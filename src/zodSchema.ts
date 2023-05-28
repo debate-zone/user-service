@@ -30,14 +30,21 @@ export const userSchema = baseZodSchema
 export const newUserSchema = userSchema.deepPartial();
 export const outputNewUserSchema = userSchema.deepPartial();
 
+export const updateUserSchema = userSchema
+    .pick({
+        politicalPreference: true,
+    })
+    .strict();
+
 export const loginUserSchema = z.object({
     email: emailSchema.optional(),
     password: passwordSchema.optional(),
-    provider: z.nativeEnum(TokenProviderEnum),
+    provider: z.nativeEnum(TokenProviderEnum).optional(),
 });
 
-export const outputLoginUserSchema = userSchema.omit({
-    password: true,
+export const outputLoginUserSchema = userSchema.pick({
+    email: true,
+    politicalPreference: true,
 });
 
 export const registerUserSchema = baseCredentialsUserSchema.extend({

@@ -21,13 +21,17 @@ export const authMiddleware = createMiddleware({
         }
 
         const token = request?.headers?.authorization?.split(' ')[1];
+        const provider = request.headers[
+            'x-auth-provider'
+        ] as TokenProviderEnum;
 
         const loggedUser = await login(
             {
-                provider: TokenProviderEnum.APPLE,
+                provider: provider,
             },
             {
                 token,
+                provider,
             },
         );
 
@@ -56,6 +60,7 @@ export const authMiddlewareToken = createMiddleware({
         }
         return {
             token: request.headers.authorization.split(' ')[1],
+            provider: request.headers['x-auth-provider'] as TokenProviderEnum,
         };
     },
 });
