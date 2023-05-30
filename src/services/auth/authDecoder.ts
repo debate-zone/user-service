@@ -3,6 +3,7 @@ import { authAppleService } from './authAppleService';
 import { TokenProviderEnum } from '../../utils/enums/TokenProviderEnum';
 import { authGoogleService } from './authGoogleService';
 import { JwtPayload } from 'jsonwebtoken';
+import { authFacebookService } from './authFacebookService';
 
 export interface AuthDecoded extends JwtPayload {
     verifiedEmail?: boolean;
@@ -14,7 +15,11 @@ export interface AuthDecoded extends JwtPayload {
     company?: string;
 }
 
-const authDecoders: AuthDecoder[] = [authAppleService, authGoogleService];
+const authDecoders: AuthDecoder[] = [
+    authAppleService,
+    authGoogleService,
+    authFacebookService,
+];
 
 export const decode = async (
     token: string,
