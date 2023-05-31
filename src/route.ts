@@ -6,6 +6,7 @@ import {
 import {
     loginRoute as login,
     registerRoute as register,
+    loginWithCredentialsRoute as loginWithCredentials,
 } from './endpoints/authEndpoint';
 
 export const routing: Routing = {
@@ -16,6 +17,7 @@ export const routing: Routing = {
         },
         auth: {
             login,
+            'login-with-credentials': loginWithCredentials,
             register,
         },
     },

@@ -1,7 +1,69 @@
-import { LoginCredentialsUser, User } from '../../types';
+import {
+    LoginCredentialsUser,
+    OutputLoginCredentialsUser,
+    OutputRegister,
+    RegisterUser,
+    User,
+} from '../../types';
 import { userDbController } from '../../dbController';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { createHttpError } from 'express-zod-api';
+import { AuthDecoder } from '../../interfaces';
+import { TokenProviderEnum } from '../../utils/enums/TokenProviderEnum';
+import { AuthDecoded } from './authDecoder';
+import { sign, verify } from 'jsonwebtoken';
+const crypto = require('crypto');
+import 'dotenv/config';
+
+export type JWT = {
+    email: string;
+};
+class AuthCredentialsService implements AuthDecoder {
+    readonly provider: TokenProviderEnum = TokenProviderEnum.CREDENTIALS;
+
+    async decodeToken(token: string): Promise<AuthDecoded> {
+        let jwtPayload: JWT | undefined;
+        try {
+            jwtPayload = verify(token, getJwtSecret()) as JWT;
+        } catch (error) {
+            throw createHttpError(401, 'Invalid token');
+        }
+
+        return {
+            email: jwtPayload.email,
+        } as AuthDecoded;
+    }
+}
+
+export const authCredentialsService = new AuthCredentialsService();
+
+export const loginWithCredentials = async (
+    loginCredentialsUser: LoginCredentialsUser,
+): Promise<OutputLoginCredentialsUser> => {
+    const user = await validateCredentials(loginCredentialsUser);
+
+    const jwtPayload: JWT = {
+        email: user.email,
+    };
+
+    const accessToken = sign(jwtPayload, getJwtSecret(), {
+        expiresIn: '1d',
+    });
+
+    return {
+        accessToken: accessToken,
+    } as OutputLoginCredentialsUser;
+};
+
+const getJwtSecret = (): string => {
+    if (!process.env.JWT_SECRET) {
+        throw createHttpError(500, 'Env variable JWT_SECRET not found');
+    }
+    return crypto
+        .createHash('sha256')
+        .update(process.env.JWT_SECRET)
+        .digest('hex');
+};
 
 export const validateCredentials = async (
     loginCredentialsUser: LoginCredentialsUser,
@@ -32,4 +94,42 @@ export const validateCredentials = async (
     return {
         email: existUser.email,
     };
+};
+
+export const register = async (
+    input: RegisterUser,
+): Promise<OutputRegister> => {
+    const saltRounds = 10;
+
+    const existUser = await userDbController.findOne({
+        email: input.email,
+    });
+
+    if (existUser) {
+        throw createHttpError(400, 'User already exists');
+    }
+
+    const hashedPassword = bcrypt.hashSync(input.password, saltRounds);
+
+    const user: User | null = await userDbController.save(
+        {},
+        {
+            email: input.email,
+            password: hashedPassword,
+        },
+    );
+
+    if (!user) {
+        throw createHttpError(500, 'Internal error');
+    } else {
+        const outputLoginCredentialsUser: OutputLoginCredentialsUser =
+            await loginWithCredentials({
+                email: input.email,
+                password: input.password,
+            });
+
+        return {
+            accessToken: outputLoginCredentialsUser.accessToken,
+        } as OutputRegister;
+    }
 };
