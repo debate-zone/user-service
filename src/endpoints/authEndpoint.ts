@@ -1,13 +1,18 @@
 import { defaultEndpointsFactory } from 'express-zod-api';
 import { authMiddlewareToken } from '../middlewares';
 import {
+    loginCredentialsUserSchema,
     loginUserSchema,
+    outputLoginCredentialsUserSchema,
     outputLoginUserSchema,
+    outputRegisterSchema,
     registerUserSchema,
-    userSchema,
 } from '../zodSchema';
-import { User } from '../types';
-import { login, register } from '../services/auth/authService';
+import { login } from '../services/auth/authService';
+import {
+    loginWithCredentials,
+    register,
+} from '../services/auth/authCredentialsService';
 
 export const loginRoute = defaultEndpointsFactory
     .addMiddleware(authMiddlewareToken)
@@ -23,14 +28,26 @@ export const loginRoute = defaultEndpointsFactory
         },
     });
 
+export const loginWithCredentialsRoute = defaultEndpointsFactory.build({
+    shortDescription: 'Login user with credentials',
+    description: 'Login user with credentials',
+    method: 'post',
+    input: loginCredentialsUserSchema,
+    output: outputLoginCredentialsUserSchema,
+    handler: async ({ input, options, logger }) => {
+        logger.info('Login user with credentials', input);
+        return await loginWithCredentials(input);
+    },
+});
+
 export const registerRoute = defaultEndpointsFactory.build({
     shortDescription: 'Register user',
     description: 'Register user',
     method: 'post',
     input: registerUserSchema,
-    output: userSchema,
-    handler: async ({ input, options, logger }): Promise<User> => {
-        logger.info('Register user', input);
+    output: outputRegisterSchema,
+    handler: async ({ input, options, logger }) => {
+        logger.info('Register user', input.email);
         return await register(input);
     },
 });
