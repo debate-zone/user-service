@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import { createHttpError } from 'express-zod-api';
 import { AuthDecoder } from '../../interfaces';
 import { TokenProviderEnum } from '../../utils/enums/TokenProviderEnum';
@@ -32,13 +31,14 @@ class AuthAppleService implements AuthDecoder {
     }
 
     async decodeToken(token: string): Promise<AuthDecoded> {
-        const decodedToken: JwtPayload | string | null = jwt.decode(token);
-
-        if (!decodedToken || typeof decodedToken === 'string') {
-            throw createHttpError(401, 'Invalid token');
-        } else {
-            return { email: decodedToken.email };
-        }
+        // const decodedToken: JwtPayload | string | null = jwt.decode(token);
+        //
+        // if (!decodedToken || typeof decodedToken === 'string') {
+        //     throw createHttpError(401, 'Invalid token');
+        // } else {
+        //     return { email: decodedToken.email };
+        // }
+        throw createHttpError(501, 'Not Implemented');
     }
 }
 

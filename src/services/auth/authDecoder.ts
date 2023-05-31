@@ -4,6 +4,7 @@ import { TokenProviderEnum } from '../../utils/enums/TokenProviderEnum';
 import { authGoogleService } from './authGoogleService';
 import { JwtPayload } from 'jsonwebtoken';
 import { authFacebookService } from './authFacebookService';
+import { authCredentialsService } from './authCredentialsService';
 
 export interface AuthDecoded extends JwtPayload {
     verifiedEmail?: boolean;
@@ -19,6 +20,7 @@ const authDecoders: AuthDecoder[] = [
     authAppleService,
     authGoogleService,
     authFacebookService,
+    authCredentialsService,
 ];
 
 export const decode = async (
