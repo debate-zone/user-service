@@ -35,7 +35,6 @@ export const politicalPreferenceHistoryMongooseSchema: mongoose.Schema =
 
 export const politicalPreferenceHistoryModel =
     mongoose.model<PoliticalPreferenceHistoryDocument>(
-        process.env.MONGO_DB_NAME!,
-        politicalPreferenceHistoryMongooseSchema,
         CollectionsEnum.POLITICAL_PREFERENCE_HISTORY,
+        politicalPreferenceHistoryMongooseSchema,
     );

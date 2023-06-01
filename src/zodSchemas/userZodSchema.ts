@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { baseZodSchema } from '../../../debate-zone-micro-service-common-library/src/zod/baseZodSchema';
 import { PoliticalPreferenceEnum } from '../utils/enums/PoliticalPreferenceEnum';
 import { TokenProviderEnum } from '../utils/enums/TokenProviderEnum';
+import { Role } from '../utils/enums/Role';
 
 const emailSchema = z.string().email().min(5).max(50);
 const passwordSchema = z.string().min(8).max(20);
@@ -24,6 +25,7 @@ export const userSchema = baseZodSchema
     .extend({
         token: tokenSchema.optional(),
         politicalPreference: z.nativeEnum(PoliticalPreferenceEnum).optional(),
+        role: z.nativeEnum(Role).default(Role.USER).optional(),
     })
     .strict();
 
@@ -45,6 +47,7 @@ export const loginUserSchema = z.object({
 export const outputLoginUserSchema = userSchema.pick({
     email: true,
     politicalPreference: true,
+    role: true,
 });
 
 export const registerUserSchema = baseCredentialsUserSchema.extend({});

@@ -6,6 +6,7 @@ import { baseSchema } from '../../../debate-zone-micro-service-common-library/sr
 import { CollectionsEnum } from '../../../debate-zone-micro-service-common-library/src/enums/collectionsEnum';
 import { PoliticalPreferenceEnum } from '../utils/enums/PoliticalPreferenceEnum';
 import { TokenProviderEnum } from '../utils/enums/TokenProviderEnum';
+import { Role } from '../utils/enums/Role';
 
 export type UserDocument = Document & User;
 
@@ -45,6 +46,10 @@ export const userMongooseSchema: mongoose.Schema = baseSchema.add({
         type: String,
         enum: Object.values(PoliticalPreferenceEnum),
     },
+    role: {
+        type: String,
+        enum: Object.values(Role),
+    },
 });
 
 userMongooseSchema.index(
@@ -57,7 +62,6 @@ userMongooseSchema.index(
 );
 
 export const userModel = mongoose.model<UserDocument>(
-    process.env.MONGO_DB_NAME!,
-    userMongooseSchema,
     CollectionsEnum.USER,
+    userMongooseSchema,
 );

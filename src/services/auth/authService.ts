@@ -3,6 +3,7 @@ import { AuthDecoded, decode } from './authDecoder';
 import { createHttpError } from 'express-zod-api';
 import { LoginUser, OutputLoginUser, User } from '../../types/userTypes';
 import { userDbController } from '../../dbController';
+import { Role } from '../../utils/enums/Role';
 
 export const login = async (
     input: LoginUser,
@@ -27,6 +28,7 @@ export const login = async (
         },
         {
             email: decodedToken.email,
+            role: getRole(decodedToken.email),
             token: {
                 accessToken: decodedToken?.accessToken,
                 accessTokenExpiresAt: decodedToken?.accessTokenExpiresAt,
@@ -43,5 +45,11 @@ export const login = async (
     return {
         email: user.email,
         politicalPreference: user.politicalPreference,
+        role: user.role,
     };
+};
+
+// TODO: Reimplement after testing
+const getRole = (email: string): Role => {
+    return email.endsWith('@debatezone.eu') ? Role.ADMIN : Role.USER;
 };
