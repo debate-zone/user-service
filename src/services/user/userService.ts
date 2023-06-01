@@ -1,4 +1,4 @@
-import { NewUser, User } from '../../types';
+import { NewUser, User } from '../../types/userTypes';
 import { userDbController } from '../../dbController';
 import { createHttpError } from 'express-zod-api';
 

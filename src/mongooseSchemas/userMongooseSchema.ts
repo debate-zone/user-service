@@ -1,10 +1,11 @@
 import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
-import { User } from './types';
+import { User } from '../types/userTypes';
 import 'dotenv/config';
-import { baseSchema } from '../../debate-zone-micro-service-common-library/src/mongoose/baseSchema';
-import { PoliticalPreferenceEnum } from './utils/enums/PoliticalPreferenceEnum';
-import { TokenProviderEnum } from './utils/enums/TokenProviderEnum';
+import { baseSchema } from '../../../debate-zone-micro-service-common-library/src/mongoose/baseSchema';
+import { CollectionsEnum } from '../../../debate-zone-micro-service-common-library/src/enums/collectionsEnum';
+import { PoliticalPreferenceEnum } from '../utils/enums/PoliticalPreferenceEnum';
+import { TokenProviderEnum } from '../utils/enums/TokenProviderEnum';
 
 export type UserDocument = Document & User;
 
@@ -58,4 +59,5 @@ userMongooseSchema.index(
 export const userModel = mongoose.model<UserDocument>(
     process.env.MONGO_DB_NAME!,
     userMongooseSchema,
+    CollectionsEnum.USER,
 );

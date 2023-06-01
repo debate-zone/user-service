@@ -3,7 +3,7 @@ import {
     newUserSchema,
     outputNewUserSchema,
     updateUserSchema,
-} from '../zodSchema';
+} from '../zodSchemas/userZodSchema';
 import { authMiddleware } from '../middlewares';
 import { save } from '../services/user/userService';
 
