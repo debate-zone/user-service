@@ -1,6 +1,6 @@
 import { BaseDbController } from '../../debate-zone-micro-service-common-library/src/mongoose/baseDbController';
-import { User } from './types';
-import { userModel } from './mongooseSchema';
+import { User } from './types/userTypes';
+import { userModel } from './mongooseSchemas/userMongooseSchema';
 
 class UserDbController extends BaseDbController<User> {}
 
