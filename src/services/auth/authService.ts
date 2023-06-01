@@ -1,7 +1,7 @@
 import { TokenProviderEnum } from '../../utils/enums/TokenProviderEnum';
 import { AuthDecoded, decode } from './authDecoder';
 import { createHttpError } from 'express-zod-api';
-import { LoginUser, OutputLoginUser, User } from '../../types';
+import { LoginUser, OutputLoginUser, User } from '../../types/userTypes';
 import { userDbController } from '../../dbController';
 
 export const login = async (

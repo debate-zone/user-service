@@ -4,7 +4,7 @@ import {
     OutputRegister,
     RegisterUser,
     User,
-} from '../../types';
+} from '../../types/userTypes';
 import { userDbController } from '../../dbController';
 import * as bcrypt from 'bcrypt';
 import { createHttpError } from 'express-zod-api';

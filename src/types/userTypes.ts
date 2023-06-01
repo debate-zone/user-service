@@ -7,7 +7,7 @@ import {
     outputRegisterSchema,
     registerUserSchema,
     userSchema,
-} from './zodSchema';
+} from '../zodSchemas/userZodSchema';
 import { z } from 'zod';
 
 export type User = z.infer<typeof userSchema>;
