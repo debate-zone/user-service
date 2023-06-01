@@ -7,7 +7,7 @@ import {
     outputLoginUserSchema,
     outputRegisterSchema,
     registerUserSchema,
-} from '../zodSchema';
+} from '../zodSchemas/userZodSchema';
 import { login } from '../services/auth/authService';
 import {
     loginWithCredentials,
