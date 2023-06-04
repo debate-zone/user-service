@@ -31,7 +31,7 @@ export const updateUserEndpoint = defaultEndpointsFactory
             logger.info('Update user', input);
 
             return await save(input, {
-                email: options.loggedUser.email,
+                email: options.loggedUser.email!,
             });
         },
     });

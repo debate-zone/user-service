@@ -13,7 +13,10 @@ export type UserDocument = Document & User;
 export const userMongooseSchema: mongoose.Schema = baseSchema.add({
     email: {
         type: String,
-        required: true,
+        required: function () {
+            // @ts-ignore
+            return !this.phoneNumber;
+        },
     },
     password: {
         type: String,
@@ -49,6 +52,13 @@ export const userMongooseSchema: mongoose.Schema = baseSchema.add({
     role: {
         type: String,
         enum: Object.values(Role),
+    },
+    phoneNumber: {
+        type: String,
+        required: function () {
+            // @ts-ignore
+            return !this.email;
+        },
     },
 });
 
