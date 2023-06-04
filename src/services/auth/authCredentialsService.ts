@@ -92,7 +92,7 @@ export const validateCredentials = async (
     }
 
     return {
-        email: existUser.email,
+        email: existUser.email!,
     };
 };
 
