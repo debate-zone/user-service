@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import { baseZodSchema } from '../../../debate-zone-micro-service-common-library/src/zod/baseZodSchema';
+import {
+    baseZodSchema,
+    phoneNumberSchema,
+} from '../../../debate-zone-micro-service-common-library/src/zod/baseZodSchema';
 import { PoliticalPreferenceEnum } from '../utils/enums/PoliticalPreferenceEnum';
 import { TokenProviderEnum } from '../utils/enums/TokenProviderEnum';
 import { Role } from '../utils/enums/Role';
@@ -21,11 +24,17 @@ export const tokenSchema = z.object({
 });
 
 export const userSchema = baseZodSchema
-    .merge(baseCredentialsUserSchema)
+    .merge(
+        baseCredentialsUserSchema.omit({
+            email: true,
+        }),
+    )
     .extend({
+        email: emailSchema.optional(),
         token: tokenSchema.optional(),
         politicalPreference: z.nativeEnum(PoliticalPreferenceEnum).optional(),
         role: z.nativeEnum(Role).default(Role.USER).optional(),
+        phoneNumber: phoneNumberSchema.optional(),
     })
     .strict();
 
