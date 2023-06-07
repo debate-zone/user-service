@@ -46,8 +46,16 @@ export const userMongooseSchema: mongoose.Schema = baseSchema.add({
         },
     },
     politicalPreference: {
-        type: String,
-        enum: Object.values(PoliticalPreferenceEnum),
+        code: {
+            type: String,
+            enum: Object.values(PoliticalPreferenceEnum),
+        },
+        x: {
+            type: Number,
+        },
+        y: {
+            type: Number,
+        },
     },
     role: {
         type: String,
