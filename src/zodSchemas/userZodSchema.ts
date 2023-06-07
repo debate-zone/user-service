@@ -23,6 +23,16 @@ export const tokenSchema = z.object({
     provider: z.nativeEnum(TokenProviderEnum).optional(),
 });
 
+export const politicalPreferenceSchema = z.object({
+    code: z.nativeEnum(PoliticalPreferenceEnum),
+    x: z.number(),
+    y: z.number(),
+});
+
+export const politicalPreferenceListSchema = z.object({
+    politicalPreferences: z.array(politicalPreferenceSchema),
+});
+
 export const userSchema = baseZodSchema
     .merge(
         baseCredentialsUserSchema.omit({
@@ -32,7 +42,7 @@ export const userSchema = baseZodSchema
     .extend({
         email: emailSchema.optional(),
         token: tokenSchema.optional(),
-        politicalPreference: z.nativeEnum(PoliticalPreferenceEnum).optional(),
+        politicalPreference: politicalPreferenceSchema.partial().optional(),
         role: z.nativeEnum(Role).default(Role.USER).optional(),
         phoneNumber: phoneNumberSchema.optional(),
     })
@@ -41,9 +51,9 @@ export const userSchema = baseZodSchema
 export const newUserSchema = userSchema.deepPartial();
 export const outputNewUserSchema = userSchema.deepPartial();
 
-export const updateUserSchema = userSchema
-    .pick({
-        politicalPreference: true,
+export const updateUserSchema = z
+    .object({
+        politicalPreference: z.nativeEnum(PoliticalPreferenceEnum),
     })
     .strict();
 

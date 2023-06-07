@@ -5,7 +5,7 @@ import {
     updateUserSchema,
 } from '../zodSchemas/userZodSchema';
 import { authMiddleware } from '../middlewares';
-import { save } from '../services/user/userService';
+import { save, update } from '../services/user/userService';
 
 export const newUserEndpoint = defaultEndpointsFactory.build({
     shortDescription: 'Create a new user',
@@ -24,13 +24,13 @@ export const updateUserEndpoint = defaultEndpointsFactory
     .build({
         shortDescription: 'Update user',
         description: 'Update user',
-        method: 'post',
+        method: 'put',
         input: updateUserSchema,
         output: outputNewUserSchema,
         handler: async ({ input, options, logger }): Promise<{}> => {
             logger.info('Update user', input);
 
-            return await save(input, {
+            return await update(input, {
                 email: options.loggedUser.email!,
             });
         },
