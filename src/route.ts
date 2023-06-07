@@ -8,12 +8,16 @@ import {
     registerRoute as register,
     loginWithCredentialsRoute as loginWithCredentials,
 } from './endpoints/authEndpoint';
+import { politicalPreferenceListEndpoint } from './endpoints/userPoliticalPreferenceEndpoint';
 
 export const routing: Routing = {
     v1: {
         users: {
             newUser,
             updateUser,
+            politicalPreferences: {
+                list: politicalPreferenceListEndpoint,
+            },
         },
         auth: {
             login,

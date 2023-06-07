@@ -6,6 +6,7 @@ import {
     outputLoginUserSchema,
     outputRegisterSchema,
     registerUserSchema,
+    updateUserSchema,
     userSchema,
 } from '../zodSchemas/userZodSchema';
 import { z } from 'zod';
@@ -26,3 +27,5 @@ export type NewUser = z.infer<typeof newUserSchema>;
 export type OutputLoginCredentialsUser = z.infer<
     typeof outputLoginCredentialsUserSchema
 >;
+
+export type UpdateUser = z.infer<typeof updateUserSchema>;
