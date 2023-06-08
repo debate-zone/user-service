@@ -11,6 +11,18 @@ import { Role } from '../utils/enums/Role';
 export type UserDocument = Document & User;
 
 export const userMongooseSchema: mongoose.Schema = baseSchema.add({
+    firstName: {
+        type: String,
+        required: false,
+    },
+    secondName: {
+        type: String,
+        required: false,
+    },
+    image: {
+        type: String,
+        required: false,
+    },
     email: {
         type: String,
         required: function () {
