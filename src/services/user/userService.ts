@@ -29,14 +29,22 @@ export async function update(
                 politicalPreference.code === updateUser.politicalPreference,
         );
 
+    const userToUpdate: User = {
+        politicalPreference,
+        firstName: updateUser.fullName?.split(' ')[0],
+        secondName: updateUser.fullName?.split(' ')[1],
+    } as User;
+
     const user: User | null = await userDbController.save(
         {
             email: options?.email,
         },
         {
-            politicalPreference,
+            ...userToUpdate,
         },
     );
+
+    console.log(user);
 
     if (!user) {
         throw createHttpError(500, 'Internal error');

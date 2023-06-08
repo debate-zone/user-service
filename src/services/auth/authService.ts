@@ -28,7 +28,10 @@ export const login = async (
         },
         {
             email: decodedToken.email,
+            firstName: decodedToken.firstName,
+            secondName: decodedToken.secondName,
             role: getRole(decodedToken.email),
+            image: decodedToken.picture,
             token: {
                 accessToken: decodedToken?.accessToken,
                 accessTokenExpiresAt: decodedToken?.accessTokenExpiresAt,
@@ -43,6 +46,9 @@ export const login = async (
     }
 
     return {
+        firstName: user.firstName,
+        secondName: user.secondName,
+        image: user.image,
         email: user.email,
         politicalPreference: user.politicalPreference,
         role: user.role,
