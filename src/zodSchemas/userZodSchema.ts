@@ -40,6 +40,9 @@ export const userSchema = baseZodSchema
         }),
     )
     .extend({
+        image: z.string().url().optional(),
+        firstName: z.string().min(2).max(50).optional(),
+        secondName: z.string().min(2).max(50).optional(),
         email: emailSchema.optional(),
         token: tokenSchema.optional(),
         politicalPreference: politicalPreferenceSchema.partial().optional(),
@@ -53,7 +56,8 @@ export const outputNewUserSchema = userSchema.deepPartial();
 
 export const updateUserSchema = z
     .object({
-        politicalPreference: z.nativeEnum(PoliticalPreferenceEnum),
+        fullName: z.string().max(100).optional(),
+        politicalPreference: z.nativeEnum(PoliticalPreferenceEnum).optional(),
     })
     .strict();
 
@@ -64,9 +68,12 @@ export const loginUserSchema = z.object({
 });
 
 export const outputLoginUserSchema = userSchema.pick({
+    firstName: true,
+    secondName: true,
     email: true,
     politicalPreference: true,
     role: true,
+    image: true,
 });
 
 export const registerUserSchema = baseCredentialsUserSchema.extend({});

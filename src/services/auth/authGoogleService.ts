@@ -15,14 +15,20 @@ class AuthGoogleService implements AuthDecoder {
     }
 
     async decodeToken(token: string): Promise<AuthDecoded> {
-        const response = await this.googleAuthAxiosInstance.get(
-            '/userinfo/v2/me',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+        const response = await this.googleAuthAxiosInstance.get<{
+            verified_email: boolean;
+            email: string;
+            given_name: string;
+            family_name: string;
+            picture: string;
+            locale: string;
+            hd: string;
+            en: string;
+        }>('/userinfo/v2/me', {
+            headers: {
+                Authorization: `Bearer ${token}`,
             },
-        );
+        });
 
         return {
             verifiedEmail: response.data.verified_email,
