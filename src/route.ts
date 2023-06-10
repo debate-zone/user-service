@@ -1,27 +1,24 @@
 import { Routing } from 'express-zod-api';
-import {
-    newUserEndpoint as newUser,
-    updateUserEndpoint as updateUser,
-} from './endpoints/userEndpoint';
+import { newUserEndpoint, updateUserEndpoint } from './endpoints/userEndpoint';
 import {
     loginRoute as login,
     registerRoute as register,
-    loginWithCredentialsRoute as loginWithCredentials,
+    loginWithCredentialsRoute,
 } from './endpoints/authEndpoint';
 import { politicalPreferenceListEndpoint } from './endpoints/userPoliticalPreferenceEndpoint';
 
 export const routing: Routing = {
     v1: {
         users: {
-            newUser,
-            updateUser,
-            politicalPreferences: {
+            new: newUserEndpoint,
+            update: updateUserEndpoint,
+            'political-preferences': {
                 list: politicalPreferenceListEndpoint,
             },
         },
         auth: {
             login,
-            'login-with-credentials': loginWithCredentials,
+            'login-with-credentials': loginWithCredentialsRoute,
             register,
         },
     },
