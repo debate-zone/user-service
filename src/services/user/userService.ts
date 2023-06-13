@@ -15,7 +15,9 @@ export async function save(input: NewUser, options?: { email: string }) {
     if (!user) {
         throw createHttpError(500, 'Internal error');
     } else {
-        return user;
+        const { password, ...userWithoutPassword } = user;
+
+        return userWithoutPassword;
     }
 }
 
@@ -44,11 +46,11 @@ export async function update(
         },
     );
 
-    console.log(user);
-
     if (!user) {
         throw createHttpError(500, 'Internal error');
     } else {
-        return user;
+        const { password, ...userWithoutPassword } = user;
+
+        return userWithoutPassword;
     }
 }

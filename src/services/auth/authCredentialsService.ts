@@ -14,9 +14,11 @@ import { AuthDecoded } from './authDecoder';
 import { sign, verify } from 'jsonwebtoken';
 const crypto = require('crypto');
 import 'dotenv/config';
+import { Role } from '../../utils/enums/Role';
 
 export type JWT = {
-    email: string;
+    email?: string;
+    userId?: string;
 };
 class AuthCredentialsService implements AuthDecoder {
     readonly provider: TokenProviderEnum = TokenProviderEnum.CREDENTIALS;
@@ -43,6 +45,7 @@ export const loginWithCredentials = async (
     const user = await validateCredentials(loginCredentialsUser);
 
     const jwtPayload: JWT = {
+        userId: user.userId,
         email: user.email,
     };
 
@@ -68,6 +71,8 @@ const getJwtSecret = (): string => {
 export const validateCredentials = async (
     loginCredentialsUser: LoginCredentialsUser,
 ): Promise<{
+    userId: string;
+    role?: Role;
     email: string;
 }> => {
     const existUser: User | null = await userDbController.findOne({
@@ -92,6 +97,8 @@ export const validateCredentials = async (
     }
 
     return {
+        userId: existUser._id,
+        role: existUser.role,
         email: existUser.email!,
     };
 };
@@ -111,13 +118,10 @@ export const register = async (
 
     const hashedPassword = bcrypt.hashSync(input.password, saltRounds);
 
-    const user: User | null = await userDbController.save(
-        {},
-        {
-            email: input.email,
-            password: hashedPassword,
-        },
-    );
+    const user: User | null = await userDbController.create({
+        email: input.email,
+        password: hashedPassword,
+    });
 
     if (!user) {
         throw createHttpError(500, 'Internal error');

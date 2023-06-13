@@ -7,7 +7,7 @@ import { PoliticalPreferenceEnum } from '../utils/enums/PoliticalPreferenceEnum'
 import { TokenProviderEnum } from '../utils/enums/TokenProviderEnum';
 import { Role } from '../utils/enums/Role';
 
-const emailSchema = z.string().email().min(5).max(50);
+const emailSchema = z.string().email().min(5).max(50).toLowerCase();
 const passwordSchema = z.string().min(8).max(20);
 
 const baseCredentialsUserSchema = z.object({
@@ -52,7 +52,11 @@ export const userSchema = baseZodSchema
     .strict();
 
 export const newUserSchema = userSchema.deepPartial();
-export const outputNewUserSchema = userSchema.deepPartial();
+export const outputNewUserSchema = userSchema
+    .omit({
+        password: true,
+    })
+    .deepPartial();
 
 export const updateUserSchema = z
     .object({
