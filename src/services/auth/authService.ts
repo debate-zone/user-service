@@ -46,6 +46,7 @@ export const login = async (
     }
 
     return {
+        _id: user._id,
         firstName: user.firstName,
         secondName: user.secondName,
         image: user.image,
