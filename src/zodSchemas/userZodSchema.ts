@@ -72,6 +72,7 @@ export const loginUserSchema = z.object({
 });
 
 export const outputLoginUserSchema = userSchema.pick({
+    _id: true,
     firstName: true,
     secondName: true,
     email: true,
