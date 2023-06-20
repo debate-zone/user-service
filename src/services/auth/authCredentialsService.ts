@@ -18,7 +18,9 @@ import { Role } from '../../utils/enums/Role';
 
 export type JWT = {
     email?: string;
+    role?: Role;
     userId?: string;
+    fullName?: string;
 };
 class AuthCredentialsService implements AuthDecoder {
     readonly provider: TokenProviderEnum = TokenProviderEnum.CREDENTIALS;
@@ -45,8 +47,7 @@ export const loginWithCredentials = async (
     const user = await validateCredentials(loginCredentialsUser);
 
     const jwtPayload: JWT = {
-        userId: user.userId,
-        email: user.email,
+        ...user,
     };
 
     const accessToken = sign(jwtPayload, getJwtSecret(), {
@@ -74,6 +75,7 @@ export const validateCredentials = async (
     userId: string;
     role?: Role;
     email: string;
+    fullName: string;
 }> => {
     const existUser: User | null = await userDbController.findOne({
         email: loginCredentialsUser.email,
@@ -100,6 +102,7 @@ export const validateCredentials = async (
         userId: existUser._id,
         role: existUser.role,
         email: existUser.email!,
+        fullName: existUser.firstName + ' ' + existUser.secondName,
     };
 };
 

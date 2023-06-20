@@ -91,3 +91,11 @@ export const loginCredentialsUserSchema = baseCredentialsUserSchema.extend({});
 export const outputLoginCredentialsUserSchema = z.object({
     accessToken: z.string(),
 });
+
+export const inputUserEmailByIdSchema = z.object({
+    userId: z.string(),
+});
+
+export const outputUserEmailByIdSchema = z.object({
+    email: z.string(),
+});
