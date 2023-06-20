@@ -54,3 +54,17 @@ export async function update(
         return userWithoutPassword;
     }
 }
+
+export async function getUserEmailById(userId: string) {
+    const user: User | null = await userDbController.findOne({
+        _id: userId,
+    });
+
+    if (!user) {
+        throw createHttpError(500, 'Internal error');
+    } else {
+        return {
+            email: user.email!,
+        };
+    }
+}

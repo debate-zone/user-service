@@ -1,5 +1,9 @@
 import { Routing } from 'express-zod-api';
-import { newUserEndpoint, updateUserEndpoint } from './endpoints/userEndpoint';
+import {
+    getUserEmailByIdEndpoint,
+    newUserEndpoint,
+    updateUserEndpoint,
+} from './endpoints/userEndpoint';
 import {
     loginRoute as login,
     registerRoute as register,
@@ -15,6 +19,7 @@ export const routing: Routing = {
             'political-preferences': {
                 list: politicalPreferenceListEndpoint,
             },
+            email: getUserEmailByIdEndpoint,
         },
         auth: {
             login,
