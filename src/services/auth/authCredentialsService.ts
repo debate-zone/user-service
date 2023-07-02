@@ -1,5 +1,6 @@
 import {
     LoginCredentialsUser,
+    OutputDecodedToken,
     OutputLoginCredentialsUser,
     OutputRegister,
     RegisterUser,
@@ -12,9 +13,10 @@ import { AuthDecoder } from '../../interfaces';
 import { TokenProviderEnum } from '../../utils/enums/TokenProviderEnum';
 import { AuthDecoded } from './authDecoder';
 import { sign, verify } from 'jsonwebtoken';
-const crypto = require('crypto');
 import 'dotenv/config';
-import { Role } from '../../utils/enums/Role';
+import { Role } from '../../../../debate-zone-micro-service-common-library/src/types/user';
+
+const crypto = require('crypto');
 
 export type JWT = {
     email?: string;
@@ -35,6 +37,9 @@ class AuthCredentialsService implements AuthDecoder {
 
         return {
             email: jwtPayload.email,
+            role: jwtPayload.role,
+            userId: jwtPayload.userId,
+            fullName: jwtPayload.fullName,
         } as AuthDecoded;
     }
 }
@@ -120,10 +125,18 @@ export const register = async (
     }
 
     const hashedPassword = bcrypt.hashSync(input.password, saltRounds);
+    const firstName: string | undefined = parseFirstAndSecondNameFromEmail(
+        input.email,
+    )[0];
+    const secondName: string | undefined = parseFirstAndSecondNameFromEmail(
+        input.email,
+    )[1];
 
     const user: User | null = await userDbController.create({
         email: input.email,
         password: hashedPassword,
+        firstName: firstName,
+        secondName: secondName,
     });
 
     if (!user) {
@@ -139,4 +152,35 @@ export const register = async (
             accessToken: outputLoginCredentialsUser.accessToken,
         } as OutputRegister;
     }
+};
+
+const parseFirstAndSecondNameFromEmail = (email: string): string[] => {
+    let firstAndLastName = email.split('@')[0].split('.');
+
+    firstAndLastName = firstAndLastName.map(name => {
+        if (name.length) {
+            return name.charAt(0).toUpperCase() + name.slice(1);
+        } else {
+            return '';
+        }
+    });
+
+    if (firstAndLastName.length === 1) {
+        firstAndLastName.push('');
+    }
+
+    return firstAndLastName;
+};
+
+export const decodeToken = async (
+    token: string,
+): Promise<OutputDecodedToken> => {
+    const decodedToken = await authCredentialsService.decodeToken(token);
+
+    return {
+        userEmail: decodedToken.email,
+        userRole: decodedToken.role,
+        userId: decodedToken.userId,
+        userFullName: decodedToken.fullName,
+    } as OutputDecodedToken;
 };

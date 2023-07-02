@@ -2,6 +2,7 @@ import {
     loginCredentialsUserSchema,
     loginUserSchema,
     newUserSchema,
+    outputDecodedTokenSchema,
     outputLoginCredentialsUserSchema,
     outputLoginUserSchema,
     outputRegisterSchema,
@@ -29,3 +30,5 @@ export type OutputLoginCredentialsUser = z.infer<
 >;
 
 export type UpdateUser = z.infer<typeof updateUserSchema>;
+
+export type OutputDecodedToken = z.infer<typeof outputDecodedTokenSchema>;

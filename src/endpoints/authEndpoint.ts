@@ -3,6 +3,7 @@ import { authMiddlewareToken } from '../middlewares';
 import {
     loginCredentialsUserSchema,
     loginUserSchema,
+    outputDecodedTokenSchema,
     outputLoginCredentialsUserSchema,
     outputLoginUserSchema,
     outputRegisterSchema,
@@ -10,9 +11,11 @@ import {
 } from '../zodSchemas/userZodSchema';
 import { login } from '../services/auth/authService';
 import {
+    decodeToken,
     loginWithCredentials,
     register,
 } from '../services/auth/authCredentialsService';
+import { z } from 'zod';
 
 export const loginRoute = defaultEndpointsFactory
     .addMiddleware(authMiddlewareToken)
@@ -51,3 +54,17 @@ export const registerRoute = defaultEndpointsFactory.build({
         return await register(input);
     },
 });
+
+export const decodeTokenRoute = defaultEndpointsFactory
+    .addMiddleware(authMiddlewareToken)
+    .build({
+        shortDescription: 'Decode token',
+        description: 'Decode token',
+        method: 'get',
+        input: z.object({}),
+        output: outputDecodedTokenSchema,
+        handler: async ({ input, options, logger }) => {
+            logger.info('Decode token', options.token);
+            return decodeToken(options.token);
+        },
+    });

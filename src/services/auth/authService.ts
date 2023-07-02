@@ -3,7 +3,7 @@ import { AuthDecoded, decode } from './authDecoder';
 import { createHttpError } from 'express-zod-api';
 import { LoginUser, OutputLoginUser, User } from '../../types/userTypes';
 import { userDbController } from '../../dbController';
-import { Role } from '../../utils/enums/Role';
+import { Role } from '../../../../debate-zone-micro-service-common-library/src/types/user';
 
 export const login = async (
     input: LoginUser,
