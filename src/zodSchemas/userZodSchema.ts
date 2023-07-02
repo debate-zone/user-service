@@ -5,7 +5,7 @@ import {
 } from '../../../debate-zone-micro-service-common-library/src/zod/baseZodSchema';
 import { PoliticalPreferenceEnum } from '../utils/enums/PoliticalPreferenceEnum';
 import { TokenProviderEnum } from '../utils/enums/TokenProviderEnum';
-import { Role } from '../utils/enums/Role';
+import { Role } from '../../../debate-zone-micro-service-common-library/src/types/user';
 
 const emailSchema = z.string().email().min(5).max(50).toLowerCase();
 const passwordSchema = z.string().min(8).max(20);
@@ -98,4 +98,11 @@ export const inputUserEmailByIdSchema = z.object({
 
 export const outputUserEmailByIdSchema = z.object({
     email: z.string(),
+});
+
+export const outputDecodedTokenSchema = z.object({
+    userId: z.string(),
+    userRole: z.nativeEnum(Role).optional(),
+    userEmail: z.string(),
+    userFullName: z.string(),
 });

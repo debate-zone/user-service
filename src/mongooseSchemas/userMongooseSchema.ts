@@ -6,7 +6,7 @@ import { baseSchema } from '../../../debate-zone-micro-service-common-library/sr
 import { CollectionsEnum } from '../../../debate-zone-micro-service-common-library/src/enums/collectionsEnum';
 import { PoliticalPreferenceEnum } from '../utils/enums/PoliticalPreferenceEnum';
 import { TokenProviderEnum } from '../utils/enums/TokenProviderEnum';
-import { Role } from '../utils/enums/Role';
+import { Role } from '../../../debate-zone-micro-service-common-library/src/types/user';
 
 export type UserDocument = Document & User;
 

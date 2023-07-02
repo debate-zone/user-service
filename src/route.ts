@@ -8,6 +8,7 @@ import {
     loginRoute as login,
     registerRoute as register,
     loginWithCredentialsRoute,
+    decodeTokenRoute,
 } from './endpoints/authEndpoint';
 import { politicalPreferenceListEndpoint } from './endpoints/userPoliticalPreferenceEndpoint';
 
@@ -25,6 +26,7 @@ export const routing: Routing = {
             login,
             'login-with-credentials': loginWithCredentialsRoute,
             register,
+            verify: decodeTokenRoute,
         },
     },
 };
